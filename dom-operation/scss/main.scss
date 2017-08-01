@@ -1,3 +1,87 @@
 body {
   background: #fff;
 }
+*{
+  box-sizing: border-box;
+}
+
+.btn {
+  display: inline-block;
+  height: 30px;
+  font-size: 14px;
+  font-weight: 400;
+  background: none;
+  border: none;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  vertical-align: middle;
+  line-height: 30px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.btn-default {
+  color: #333;
+  border-color: #ccc;
+  &:hover {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+  }
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+  &:hover {
+    color: #fff;
+    background-color: #286090;
+    border-color: #204d74;
+  }
+}
+
+.main-container {
+  position: relative;
+  border: solid 1px #ccc;
+  display: flex;
+  align-items: center;
+  .item-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding-left: 10px;
+    >li {
+      background-color: #ededed;
+      padding: 1px 8px;
+      border-radius: 15px;
+      margin: 0 5px;
+      .delete {
+        margin-left: 10px;
+        cursor: pointer;
+      }
+    }
+  }
+  .popover {
+    display: none;
+    position: absolute;
+    top: 110%;
+    left: 0;
+    padding: 10px 15px;
+    border: solid 1px #cccccc;
+    width: 300px;
+    .popover-body{
+      > input {
+        width: 100%;
+        margin-bottom: 20px;
+        padding: 10px 5px;
+        border-radius: 4px;
+        border: solid 1px #ccc;
+      }
+    }
+  }
+}
