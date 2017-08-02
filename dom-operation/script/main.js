@@ -44,14 +44,19 @@
   }
 
   function createResourceDoms (items) {
-    var fragment = document.createDocumentFragment();
-    items.split(',').forEach(function (item) {
+    return items.split(',').map(function (item) {
       var formatItem = item.trim();
-      if(formatItem){
-        fragment.appendChild(createElement('<li>'+ formatItem +'<span class="delete">X</span></li>'));
+      return formatItem ? createElement(resourceTemplate(formatItem)) : formatItem;
+    }).reduce(function (fragment, itemDom) {
+      if(itemDom){
+        fragment.appendChild(itemDom);
       }
-    })
-    return fragment;
+      return fragment;
+    }, document.createDocumentFragment());
+  }
+
+  function resourceTemplate (str) {
+    return '<li>'+ str +'<span class="delete">X</span></li>';
   }
 
   function createElement (template) {
