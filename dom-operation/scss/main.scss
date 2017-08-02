@@ -1,9 +1,11 @@
 body {
   background: #fff;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  *{
+    box-sizing: border-box;
+  }
 }
-*{
-  box-sizing: border-box;
-}
+
 
 .btn {
   display: inline-block;
@@ -56,13 +58,16 @@ body {
     margin: 0;
     padding-left: 10px;
     >li {
-      background-color: #ededed;
       padding: 1px 8px;
       border-radius: 15px;
+      border: solid 1px #ededed;
       margin: 0 5px;
       .delete {
         margin-left: 10px;
         cursor: pointer;
+        &:hover {
+          color: red;
+        }
       }
     }
   }

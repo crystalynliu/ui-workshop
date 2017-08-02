@@ -2,41 +2,61 @@
   var addBtnEl = document.querySelector('#add-button');
   var popoverEl = document.querySelector('#popover');
   var itemListEl = document.querySelector('#itemList');
-  addBtnEl.addEventListener('click', function () {
-    var currentStyle = popoverEl.style.display;
-    popoverEl.style.display = currentStyle && currentStyle === 'block' ? 'none' : 'block';
-    popoverEl.querySelector('input').focus();
-  });
-
   var confirmBtnEl = popoverEl.querySelector('#confirm');
   var cancelBtnEl = popoverEl.querySelector('#cancel');
-  confirmBtnEl.addEventListener('click', function () {
-    var inputValue = popoverEl.querySelector('input').value;
-    if(inputValue){
-      itemListEl.appendChild(createItem(inputValue));
-    }
-    popoverEl.style.display = 'none';
-  })
+  var inputEl = popoverEl.querySelector('input');
 
-  cancelBtnEl.addEventListener('click', function () {
-    popoverEl.style.display = 'none';
-  });
+  addBtnEl.addEventListener('click', togglePopover);
+  confirmBtnEl.addEventListener('click', handleAddResource);
+  cancelBtnEl.addEventListener('click', closePopover);
+  itemListEl.addEventListener('click', handleDeleteResource);
 
-  itemListEl.addEventListener('click', function (event) {
+  function handleAddResource () {
+    itemListEl.appendChild(createResourceDoms(inputEl.value));
+    closePopover();
+  }
+
+  function handleDeleteResource (event) {
     if(event.target.matches('.delete')){
       var parent = event.target.parentElement;
       itemListEl.removeChild(parent);
       event.stopPropagation();
     }
-  })
+  }
 
-  function createItem (items) {
+  function togglePopover () {
+    var currentStyle = popoverEl.style.display;
+    if(currentStyle && currentStyle === 'block'){
+      closePopover();
+    } else {
+      openPopover();
+    }
+  }
+
+  function openPopover () {
+    popoverEl.style.display = 'block';
+    popoverEl.querySelector('input').focus();
+  }
+
+  function closePopover () {
+    popoverEl.style.display = 'none';
+    inputEl.value = '';
+  }
+
+  function createResourceDoms (items) {
     var fragment = document.createDocumentFragment();
     items.split(',').forEach(function (item) {
-      var li = document.createElement('li');
-      li.innerHTML = item + '<span class="delete">X</span>';
-      fragment.appendChild(li);
+      var formatItem = item.trim();
+      if(formatItem){
+        fragment.appendChild(createElement('<li>'+ formatItem +'<span class="delete">X</span></li>'));
+      }
     })
     return fragment;
+  }
+
+  function createElement (template) {
+    var div = document.createElement('div');
+    div.innerHTML = template;
+    return div.firstChild;
   }
 })()
