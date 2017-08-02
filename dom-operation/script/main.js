@@ -12,7 +12,8 @@
   itemListEl.addEventListener('click', handleDeleteResource);
 
   function handleAddResource () {
-    itemListEl.appendChild(createResourceDoms(inputEl.value));
+    var resourceNames = inputEl.value.split(',');
+    itemListEl.appendChild(createResourceDoms(resourceNames));
     closePopover();
   }
 
@@ -44,7 +45,7 @@
   }
 
   function createResourceDoms (items) {
-    return items.split(',').map(function (item) {
+    return items.map(function (item) {
       var formatItem = item.trim();
       return formatItem ? createElement(resourceTemplate(formatItem)) : formatItem;
     }).reduce(function (fragment, itemDom) {
