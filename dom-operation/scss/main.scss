@@ -47,11 +47,12 @@ body {
   }
 }
 
-.main-container {
+.container {
   position: relative;
   border: solid 1px #ccc;
   display: flex;
   align-items: center;
+  margin: 20px auto;
   .item-list {
     display: flex;
     list-style: none;
@@ -72,13 +73,14 @@ body {
     }
   }
   .popover {
-    display: none;
     position: absolute;
     top: 110%;
     left: 0;
     padding: 10px 15px;
     border: solid 1px #cccccc;
     width: 300px;
+    z-index: 1000;
+    background-color: #ffffff;
     .popover-body{
       > input {
         width: 100%;

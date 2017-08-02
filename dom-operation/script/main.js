@@ -1,47 +1,68 @@
 (function () {
-  var addBtnEl = document.querySelector('#add-button');
-  var popoverEl = document.querySelector('#popover');
-  var itemListEl = document.querySelector('#itemList');
-  var confirmBtnEl = popoverEl.querySelector('#confirm');
-  var cancelBtnEl = popoverEl.querySelector('#cancel');
-  var inputEl = popoverEl.querySelector('input');
+  var rootEl = document.querySelector('#root');
 
-  addBtnEl.addEventListener('click', togglePopover);
-  confirmBtnEl.addEventListener('click', handleAddResource);
-  cancelBtnEl.addEventListener('click', closePopover);
-  itemListEl.addEventListener('click', handleDeleteResource);
+  bindingEventListener(rootEl, 'click', '.add-button', togglePopover);
+  bindingEventListener(rootEl, 'click', '.delete', deleteResource);
+  bindingEventListener(rootEl, 'click', '.confirm', addResource);
+  bindingEventListener(rootEl, 'click', '.cancel', closePopover);
 
-  function handleAddResource () {
-    var resourceNames = inputEl.value.split(',');
+  function togglePopover (event) {
+    var containerEl = findParent(event.target, '.container');
+    if(containerEl.querySelector('.popover')){
+      removePopover(containerEl)
+    }else {
+      addPopover(containerEl);
+    }
+  }
+
+  function bindingEventListener (target, event ,selector, callBack) {
+    target.addEventListener(event, function (e) {
+      if(e.target.matches(selector)){
+        callBack(e);
+        e.stopPropagation();
+      }
+    },false);
+  }
+
+  function addResource (event) {
+    var container = findParent(event.target, '.container');
+    var inputValue = container.querySelector('input').value;
+    if(!inputValue){
+      return;
+    }
+    var resourceNames = inputValue.split(',');
+    var itemListEl = container.querySelector('.item-list');
     itemListEl.appendChild(createResourceDoms(resourceNames));
-    closePopover();
+    container.removeChild(container.querySelector('.popover'));
   }
 
-  function handleDeleteResource (event) {
-    if(event.target.matches('.delete')){
-      var parent = event.target.parentElement;
-      itemListEl.removeChild(parent);
-      event.stopPropagation();
+  function closePopover (event) {
+    removePopover(findParent(event.target, '.container'));
+  }
+
+  function removePopover (containerEl) {
+    containerEl.removeChild(containerEl.querySelector('.popover'));
+  }
+
+  function addPopover (containerEl) {
+    var popoverElement = createPopover();
+    containerEl.appendChild(popoverElement);
+  }
+
+  function deleteResource (event) {
+    var resourceItemEl = findParent(event.target, '.resource-item');
+    resourceItemEl.parentElement.removeChild(resourceItemEl);
+  }
+
+  function findParent (element, selector) {
+    var parentEl = element.parentElement;
+    while(!parentEl.matches(selector)){
+      if(!parentEl){
+        break;
+      }
+      parentEl = parentEl.parentElement;
     }
-  }
-
-  function togglePopover () {
-    var currentStyle = popoverEl.style.display;
-    if(currentStyle && currentStyle === 'block'){
-      closePopover();
-    } else {
-      openPopover();
-    }
-  }
-
-  function openPopover () {
-    popoverEl.style.display = 'block';
-    popoverEl.querySelector('input').focus();
-  }
-
-  function closePopover () {
-    popoverEl.style.display = 'none';
-    inputEl.value = '';
+    return parentEl;
   }
 
   function createResourceDoms (items) {
@@ -57,12 +78,22 @@
   }
 
   function resourceTemplate (str) {
-    return '<li>'+ str +'<span class="delete">X</span></li>';
+    return '<li class="resource-item">'+ str +'<span class="delete">X</span></li>';
   }
 
   function createElement (template) {
     var div = document.createElement('div');
     div.innerHTML = template;
     return div.firstChild;
+  }
+
+  function createPopover () {
+    var template = ['<div class="popover">',
+      '<div class="popover-body"><input type="text"/></div>',
+      '<div class="popover-footer">',
+      '<button class="btn btn-primary confirm">Confirm</button>',
+      '<button class="btn btn-default cancel">Cancel</button>',
+      '</div></div>'].join('');
+    return createElement(template);
   }
 })()
