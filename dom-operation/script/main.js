@@ -1,4 +1,5 @@
 (function () {
+  // document.addEventListener('DOMContentLoaded', ready);
   var rootEl = document.querySelector('#root');
 
   bindingEventListener(rootEl, 'click', '.add-button', togglePopover);
